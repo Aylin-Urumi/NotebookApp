@@ -1,0 +1,155 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:NotebookApp.ViewModels"
+        x:Class="NotebookApp.Views.MainWindow"
+        Title="My Notebook"
+        Width="900"
+        Height="700"
+        Background="#F5F5F5">
+
+  <Window.DataContext>
+    <vm:MainViewModel />
+  </Window.DataContext>
+
+  <Grid RowDefinitions="60,*" ColumnDefinitions="300,*" Background="#FFFFFF">
+    <!-- Header -->
+    <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#2C3E50">
+      <TextBlock Text="My Notebook" FontSize="24" FontWeight="Bold" Foreground="White" Margin="20" />
+    </Border>
+
+    <!-- Left Sidebar: Notes List -->
+    <Border Grid.Row="1" Grid.Column="0" BorderThickness="0,0,1,0" BorderBrush="#E0E0E0" Background="#FAFAFA">
+      <DockPanel>
+        <!-- Search Box -->
+        <Border DockPanel.Dock="Top" Margin="12" BorderThickness="0,0,0,1" BorderBrush="#E0E0E0">
+          <TextBox
+            Watermark="Search..."
+            Text="{Binding SearchKeyword}"
+            Padding="10"
+            Background="White"
+            BorderBrush="#D0D0D0"
+            FontSize="13" />
+        </Border>
+
+        <!-- Notes List -->
+        <ListBox
+          ItemsSource="{Binding FilteredNotes}"
+          SelectedItem="{Binding SelectedNote}"
+          Background="Transparent"
+          BorderThickness="0">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Border Margin="12" BorderThickness="0,0,0,1" BorderBrush="#F0F0F0">
+                <StackPanel>
+                  <TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="13" Foreground="#2C3E50" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Text="{Binding UpdatedAt}" FontSize="11" Foreground="#999999" />
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
+    </Border>
+
+    <!-- Right Panel: Note Detail / Edit -->
+    <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*,60" Margin="20">
+      <!-- Detail View (when not editing) -->
+      <Border Grid.Row="0" IsVisible="{Binding !IsEditMode}">
+        <ScrollViewer>
+          <StackPanel>
+            <TextBlock
+              Text="{Binding SelectedNote.Title}"
+              FontSize="28"
+              FontWeight="Bold"
+              Foreground="#2C3E50"
+              TextWrapping="Wrap"
+              Margin="0,0,0,10" />
+
+            <TextBlock
+              Text="{Binding SelectedNote.CreatedAt}"
+              FontSize="12"
+              Foreground="#999999"
+              Margin="0,0,0,20" />
+
+            <TextBlock
+              Text="{Binding SelectedNote.Content}"
+              FontSize="14"
+              Foreground="#333333"
+              TextWrapping="Wrap"
+              LineHeight="1.6" />
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+
+      <!-- Edit View (when editing) -->
+      <Border Grid.Row="0" IsVisible="{Binding IsEditMode}">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Edit Note" FontSize="18" FontWeight="Bold" Foreground="#2C3E50" />
+
+          <TextBox
+            Watermark="Title"
+            Text="{Binding EditTitle}"
+            Padding="10"
+            FontSize="16"
+            FontWeight="Bold"
+            BorderBrush="#D0D0D0" />
+
+          <TextBox
+            Watermark="Content"
+            Text="{Binding EditContent}"
+            Padding="10"
+            FontSize="14"
+            AcceptsReturn="True"
+            TextWrapping="Wrap"
+            BorderBrush="#D0D0D0"
+            Height="250" />
+        </StackPanel>
+      </Border>
+
+      <!-- Action Buttons -->
+      <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Margin="0,12,0,0">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <!-- Show in Detail Mode -->
+          <StackPanel IsVisible="{Binding !IsEditMode}" Orientation="Horizontal" Spacing="8">
+            <Button
+              Content="Edit"
+              Command="{Binding EnterEditMode}"
+              IsEnabled="{Binding SelectedNote, Converter={x:Static ObjectConverters.IsNotNull}}"
+              Padding="12,6"
+              Background="#3498DB"
+              Foreground="White"
+              BorderThickness="0" />
+
+            <Button
+              Content="Delete"
+              Command="{Binding DeleteNote}"
+              IsEnabled="{Binding SelectedNote, Converter={x:Static ObjectConverters.IsNotNull}}"
+              Padding="12,6"
+              Background="#E74C3C"
+              Foreground="White"
+              BorderThickness="0" />
+          </StackPanel>
+
+          <!-- Show in Edit Mode -->
+          <StackPanel IsVisible="{Binding IsEditMode}" Orientation="Horizontal" Spacing="8">
+            <Button
+              Content="Save"
+              Command="{Binding SaveEdit}"
+              Padding="12,6"
+              Background="#27AE60"
+              Foreground="White"
+              BorderThickness="0" />
+
+            <Button
+              Content="Cancel"
+              Command="{Binding CancelEdit}"
+              Padding="12,6"
+              Background="#95A5A6"
+              Foreground="White"
+              BorderThickness="0" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+  </Grid>
+</Window>

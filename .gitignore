@@ -1,0 +1,27 @@
+# Build results
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+
+# NuGet
+*.deps.json
+*.runtimeconfig.json
+project.assets.json
+project.nuget.cache
+.nuget/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.sln.iml
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Application data
+notes.json
