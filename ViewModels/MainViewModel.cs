@@ -1,3 +1,4 @@
+
 using System.Collections.ObjectModel;
 using ReactiveUI;
  
@@ -77,18 +78,53 @@ public class MainViewModel : ReactiveObject
  
     // ── Commands / Actions ────────────────────────────────────────────────
  
-    public void AddNote(string title, string content)
+    private string _newNoteTitle = string.Empty;
+    private string _newNoteContent = string.Empty;
+    private bool _showNewNoteDialog = false;
+ 
+    public string NewNoteTitle
     {
-        if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(content))
+        get => _newNoteTitle;
+        set => this.RaiseAndSetIfChanged(ref _newNoteTitle, value);
+    }
+ 
+    public string NewNoteContent
+    {
+        get => _newNoteContent;
+        set => this.RaiseAndSetIfChanged(ref _newNoteContent, value);
+    }
+ 
+    public bool ShowNewNoteDialog
+    {
+        get => _showNewNoteDialog;
+        set => this.RaiseAndSetIfChanged(ref _showNewNoteDialog, value);
+    }
+ 
+    public void ShowNewNoteForm()
+    {
+        ShowNewNoteDialog = true;
+    }
+ 
+    public void AddNote()
+    {
+        if (string.IsNullOrWhiteSpace(NewNoteTitle) || string.IsNullOrWhiteSpace(NewNoteContent))
         {
-            return; // Validation should happen in UI
+            return; // Validation
         }
  
-        var newNote = _notebook.Add(title, content);
+        var newNote = _notebook.Add(NewNoteTitle, NewNoteContent);
         Notes.Add(newNote);
         ApplyFilter();
-        EditTitle = string.Empty;
-        EditContent = string.Empty;
+        NewNoteTitle = string.Empty;
+        NewNoteContent = string.Empty;
+        ShowNewNoteDialog = false;
+    }
+ 
+    public void CancelNewNote()
+    {
+        NewNoteTitle = string.Empty;
+        NewNoteContent = string.Empty;
+        ShowNewNoteDialog = false;
     }
  
     public void DeleteNote()

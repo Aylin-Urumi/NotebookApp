@@ -14,7 +14,10 @@
   <Grid RowDefinitions="60,*" ColumnDefinitions="300,*" Background="#FFFFFF">
     <!-- Header -->
     <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#2C3E50">
-      <TextBlock Text="My Notebook" FontSize="24" FontWeight="Bold" Foreground="White" Margin="20" />
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock Text="My Notebook" FontSize="24" FontWeight="Bold" Foreground="White" Margin="20" />
+        <Button Grid.Column="1" Content="+ New Note" Margin="0,0,20,0" Padding="12,8" Background="#27AE60" Foreground="White" BorderThickness="0" Command="{Binding ShowNewNoteForm}" />
+      </Grid>
     </Border>
 
     <!-- Left Sidebar: Notes List -->
@@ -54,29 +57,26 @@
     <!-- Right Panel: Note Detail / Edit -->
     <Grid Grid.Row="1" Grid.Column="1" RowDefinitions="*,60" Margin="20">
       <!-- Detail View (when not editing) -->
-      <Border Grid.Row="0" IsVisible="{Binding !IsEditMode}">
-        <ScrollViewer>
-          <StackPanel>
+      <Border Grid.Row="0" IsVisible="{Binding !IsEditMode, FallbackValue=True}">
+        <ScrollViewer Padding="0">
+          <StackPanel Spacing="12">
             <TextBlock
-              Text="{Binding SelectedNote.Title}"
-              FontSize="28"
+              Text="{Binding SelectedNote.Title, FallbackValue='Select a note'}"
+              FontSize="24"
               FontWeight="Bold"
               Foreground="#2C3E50"
-              TextWrapping="Wrap"
-              Margin="0,0,0,10" />
+              TextWrapping="Wrap" />
 
             <TextBlock
-              Text="{Binding SelectedNote.CreatedAt}"
-              FontSize="12"
-              Foreground="#999999"
-              Margin="0,0,0,20" />
+              Text="{Binding SelectedNote.CreatedAt, FallbackValue=''}"
+              FontSize="11"
+              Foreground="#999999" />
 
             <TextBlock
-              Text="{Binding SelectedNote.Content}"
+              Text="{Binding SelectedNote.Content, FallbackValue='No content'}"
               FontSize="14"
               Foreground="#333333"
-              TextWrapping="Wrap"
-              LineHeight="1.6" />
+              TextWrapping="Wrap" />
           </StackPanel>
         </ScrollViewer>
       </Border>
@@ -107,7 +107,7 @@
       </Border>
 
       <!-- Action Buttons -->
-      <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Margin="0,12,0,0">
+      <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="#E0E0E0" Margin="0,12,0,0" Padding="0,12,0,0">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <!-- Show in Detail Mode -->
           <StackPanel IsVisible="{Binding !IsEditMode}" Orientation="Horizontal" Spacing="8">
@@ -147,6 +147,21 @@
               Background="#95A5A6"
               Foreground="White"
               BorderThickness="0" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </Grid>
+
+    <!-- Modal for New Note -->
+    <Grid Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="2" Background="#00000080" IsVisible="{Binding ShowNewNoteDialog}" ZIndex="1000">
+      <Border Background="White" CornerRadius="8" Width="400" Height="300" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="20">
+        <StackPanel Spacing="12">
+          <TextBlock Text="New Note" FontSize="18" FontWeight="Bold" />
+          <TextBox Watermark="Title" Text="{Binding NewNoteTitle}" Padding="10" />
+          <TextBox Watermark="Content" Text="{Binding NewNoteContent}" Padding="10" AcceptsReturn="True" Height="100" />
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+            <Button Content="Create" Padding="12,6" Background="#27AE60" Foreground="White" BorderThickness="0" Command="{Binding AddNote}" />
+            <Button Content="Cancel" Padding="12,6" Background="#95A5A6" Foreground="White" BorderThickness="0" Command="{Binding CancelNewNote}" />
           </StackPanel>
         </StackPanel>
       </Border>
