@@ -1,58 +1,66 @@
-📓 My Notebook App
+# 📓 My Notebook App
 
-A modern, cross-platform note-taking application built with C#, Avalonia, and .NET 10. This project demonstrates core Object-Oriented Programming (OOP) concepts including encapsulation, single responsibility, MVVM architecture, file I/O, and JSON serialization.
+A modern, cross-platform note-taking application built with **C#**, **Avalonia**, and **.NET 10**. This project demonstrates core Object-Oriented Programming (OOP) concepts including **encapsulation**, **single responsibility**, **MVVM architecture**, **file I/O**, and **JSON serialization**.
 
-🎯 Features
+## 🎯 Features
 
+- ✅ **Create Notes** — Add new notes with title and content
+- ✅ **View Notes** — Click a note to display its full content
+- ✅ **Edit Notes** — Modify title and content of existing notes
+- ✅ **Delete Notes** — Remove notes permanently
+- ✅ **Search Notes** — Find notes by keyword (title or content)
+- ✅ **Persistent Storage** — All notes saved to `notes.json` file
+- ✅ **Automatic Reload** — Notes load automatically on app startup
+- ✅ **Modern UI** — Built with Avalonia with Fluent design theme
 
-✅ Create Notes — Add new notes with title and content
-✅ View Notes — Click a note to display its full content
-✅ Edit Notes — Modify title and content of existing notes
-✅ Delete Notes — Remove notes permanently
-✅ Search Notes — Find notes by keyword (title or content)
-✅ Persistent Storage — All notes saved to notes.json file
-✅ Automatic Reload — Notes load automatically on app startup
-✅ Modern UI — Built with Avalonia with Fluent design theme
+## 🛠️ Tech Stack
 
+| Technology | Purpose |
+|---|---|
+| **C#** | Programming language |
+| **.NET 10** | Framework |
+| **Avalonia 11.1.3** | GUI Framework (cross-platform) |
+| **ReactiveUI** | MVVM reactive bindings |
+| **System.Text.Json** | JSON serialization/deserialization |
 
-🛠️ Tech Stack
+## 📋 Requirements
 
-TechnologyPurposeC#Programming language.NET 10FrameworkAvalonia 11.1.3GUI Framework (cross-platform)ReactiveUIMVVM reactive bindingsSystem.Text.JsonJSON serialization/deserialization
+- **.NET 10 SDK** or higher
+- **macOS**, **Windows**, or **Linux**
+- **VS Code** (or any text editor)
 
-📋 Requirements
+### Check your .NET version:
+```bash
+dotnet --version
+```
 
+## 🚀 Getting Started
 
-.NET 10 SDK or higher
-macOS, Windows, or Linux
-VS Code (or any text editor)
+### 1. Clone or open the project
+```bash
+cd NotebookApp
+```
 
+### 2. Restore NuGet packages
+```bash
+dotnet restore
+```
 
-Check your .NET version:
+### 3. Build the project
+```bash
+dotnet build
+```
 
-bashdotnet --version
-
-🚀 Getting Started
-
-1. Clone or open the project
-
-bashcd NotebookApp
-
-2. Restore NuGet packages
-
-bashdotnet restore
-
-3. Build the project
-
-bashdotnet build
-
-4. Run the application
-
-bashdotnet run
+### 4. Run the application
+```bash
+dotnet run
+```
 
 The app window should open. Start creating notes! 📝
 
-📁 Project Structure
+## 📁 Project Structure
 
+```
 NotebookApp/
 ├── Note.cs                          # Data model - represents a single note
 ├── Notebook.cs                      # Business logic - handles File I/O & serialization
@@ -67,14 +75,16 @@ NotebookApp/
 ├── NotebookApp.csproj               # Project configuration
 ├── notes.json                       # Generated at runtime (stores notes)
 └── .gitignore                       # Git ignore file
+```
 
-🔑 Key OOP Concepts
+## 🔑 Key OOP Concepts
 
-1. Encapsulation — Note.cs
+### 1. **Encapsulation** — `Note.cs`
 
-The Note class hides internal data with private fields and exposes them through validated public properties:
+The `Note` class hides internal data with private fields and exposes them through validated public properties:
 
-csharppublic class Note
+```csharp
+public class Note
 {
     private string _title;  // Private field
     
@@ -86,15 +96,18 @@ csharppublic class Note
             : value.Trim();
     }
 }
+```
 
-Why? Ensures data integrity. Users can't set invalid titles.
+**Why?** Ensures data integrity. Users can't set invalid titles.
 
+---
 
-2. Single Responsibility Principle — Notebook.cs
+### 2. **Single Responsibility Principle** — `Notebook.cs`
 
-The Notebook class has one job: manage notes and handle persistence. It doesn't deal with UI.
+The `Notebook` class has **one job**: manage notes and handle persistence. It doesn't deal with UI.
 
-csharppublic class Notebook
+```csharp
+public class Notebook
 {
     // Only responsible for:
     public Note Add(string title, string content) { ... }
@@ -104,15 +117,18 @@ csharppublic class Notebook
     private void Save() { ... }   // File I/O + Serialization
     private void Load() { ... }   // File I/O + Deserialization
 }
+```
 
-Why? If we need to change how notes are saved (e.g., to a database), we only modify this class.
+**Why?** If we need to change how notes are saved (e.g., to a database), we only modify this class.
 
+---
 
-3. MVVM Architecture — MainViewModel.cs
+### 3. **MVVM Architecture** — `MainViewModel.cs`
 
 The ViewModel separates business logic from UI. It uses reactive properties that automatically notify the UI when values change:
 
-csharppublic class MainViewModel : ReactiveObject
+```csharp
+public class MainViewModel : ReactiveObject
 {
     private Note? _selectedNote;
     
@@ -130,26 +146,30 @@ csharppublic class MainViewModel : ReactiveObject
         }
     }
 }
+```
 
-Why? The UI (MainWindow) is decoupled from logic. Easy to test and maintain.
+**Why?** The UI (MainWindow) is decoupled from logic. Easy to test and maintain.
 
+---
 
-💾 File I/O & Serialization
+## 💾 File I/O & Serialization
 
-Serialization (Object → JSON)
+### **Serialization (Object → JSON)**
 
 When you create/edit a note, it's automatically serialized to JSON and saved:
 
-csharpprivate void Save()
+```csharp
+private void Save()
 {
     var data = new NotebookData { NextId = _nextId, Notes = _notes };
     string json = JsonSerializer.Serialize(data, JsonOpts);      // ← SERIALIZATION
     File.WriteAllText(_filePath, json);                          // ← FILE I/O
 }
+```
 
-This generates notes.json:
-
-json{
+This generates `notes.json`:
+```json
+{
   "nextId": 2,
   "notes": [
     {
@@ -161,12 +181,14 @@ json{
     }
   ]
 }
+```
 
-Deserialization (JSON → Object)
+### **Deserialization (JSON → Object)**
 
 When the app starts, it reads the JSON file and converts it back to C# objects:
 
-csharpprivate void Load()
+```csharp
+private void Load()
 {
     if (!File.Exists(_filePath)) return;
     
@@ -178,54 +200,43 @@ csharpprivate void Load()
         _nextId = data.NextId;
     }
 }
+```
 
-Result: Your notes persist across app restarts! 🎉
+**Result:** Your notes persist across app restarts! 🎉
 
+---
 
-🎮 How to Use the App
+## 🎮 How to Use the App
 
-Create a Note
+### **Create a Note**
+1. Click **"+ New Note"** button in header
+2. Enter title and content
+3. Click **"Create"**
 
+### **View a Note**
+- Click a note in the left sidebar
+- Full content displays on the right
 
-Click "+ New Note" button in header
-Enter title and content
-Click "Create"
+### **Edit a Note**
+1. Select a note
+2. Click **"Edit"** button
+3. Modify title/content
+4. Click **"Save"**
 
+### **Delete a Note**
+1. Select a note
+2. Click **"Delete"** button
+3. Confirm deletion
 
-View a Note
+### **Search Notes**
+- Type in the search box on the left
+- Notes are filtered in real-time
 
+---
 
-Click a note in the left sidebar
-Full content displays on the right
+## 🏗️ Architecture Diagram
 
-
-Edit a Note
-
-
-Select a note
-Click "Edit" button
-Modify title/content
-Click "Save"
-
-
-Delete a Note
-
-
-Select a note
-Click "Delete" button
-Confirm deletion
-
-
-Search Notes
-
-
-Type in the search box on the left
-Notes are filtered in real-time
-
-
-
-🏗️ Architecture Diagram
-
+```
 ┌─────────────────────────────────────────┐
 │         MainWindow.axaml                │ ← VIEW (UI)
 │      (XAML + Code-behind)               │
@@ -253,192 +264,169 @@ Notes are filtered in real-time
 │  - Content                              │
 │  - CreatedAt, UpdatedAt                 │
 └─────────────────────────────────────────┘
+```
 
+---
 
-📝 Example Workflow
+## 📝 Example Workflow
 
+1. **User clicks "+ New Note"**
+   - `MainWindow.axaml` triggers `ShowNewNoteForm()` command
+   - `MainViewModel` sets `ShowNewNoteDialog = true`
+   - Modal dialog appears
 
-User clicks "+ New Note"
+2. **User enters title and content, clicks "Create"**
+   - `MainViewModel.AddNote()` is called
+   - Calls `_notebook.Add(title, content)`
+   - `Notebook.Add()` creates a new `Note` object
+   - `Notebook.Save()` is called:
+     - Serializes notes to JSON
+     - Writes to `notes.json` file (FILE I/O)
+   - Note appears in left sidebar
 
-MainWindow.axaml triggers ShowNewNoteForm() command
-MainViewModel sets ShowNewNoteDialog = true
-Modal dialog appears
+3. **User closes and reopens app**
+   - `Notebook.Load()` is called on startup:
+     - Reads `notes.json` file (FILE I/O)
+     - Deserializes JSON back to `Note` objects
+   - Your notes are still there! ✅
 
+---
 
+## 🧪 Testing the App
 
-User enters title and content, clicks "Create"
+### Test File I/O
+1. Create a note
+2. Close the app
+3. Reopen it
+4. **Result:** Note still exists ✅
 
-MainViewModel.AddNote() is called
-Calls _notebook.Add(title, content)
-Notebook.Add() creates a new Note object
-Notebook.Save() is called:
+### Test Serialization
+1. Create a note
+2. Open `notes.json` in a text editor
+3. **Result:** See valid JSON with your note data ✅
 
-Serializes notes to JSON
-Writes to notes.json file (FILE I/O)
+### Test Encapsulation
+- Try to create a `Note` with an empty title
+- The property setter throws an `ArgumentException` ✅
 
+### Test MVVM
+- Click a note → `SelectedNote` updates → UI refreshes automatically ✅
 
+---
 
-Note appears in left sidebar
+## 🔧 Configuration
 
-
-
-User closes and reopens app
-
-Notebook.Load() is called on startup:
-
-Reads notes.json file (FILE I/O)
-Deserializes JSON back to Note objects
-
-
-
-Your notes are still there! ✅
-
-
-
-
-
-
-🧪 Testing the App
-
-Test File I/O
-
-
-Create a note
-Close the app
-Reopen it
-Result: Note still exists ✅
-
-
-Test Serialization
-
-
-Create a note
-Open notes.json in a text editor
-Result: See valid JSON with your note data ✅
-
-
-Test Encapsulation
-
-
-Try to create a Note with an empty title
-The property setter throws an ArgumentException ✅
-
-
-Test MVVM
-
-
-Click a note → SelectedNote updates → UI refreshes automatically ✅
-
-
-
-🔧 Configuration
-
-Change the notes file path
-
-In MainViewModel.cs, change:
-
-csharpvar notebook = new Notebook("notes.json");  // ← Default location
+### Change the notes file path
+In `MainViewModel.cs`, change:
+```csharp
+var notebook = new Notebook("notes.json");  // ← Default location
+```
 
 To:
+```csharp
+var notebook = new Notebook("/path/to/my/notes.json");  // ← Custom location
+```
 
-csharpvar notebook = new Notebook("/path/to/my/notes.json");  // ← Custom location
-
-Modify the theme
-
-In App.axaml, change:
-
-xml<FluentTheme />  <!-- Light theme (default) -->
+### Modify the theme
+In `App.axaml`, change:
+```xml
+<FluentTheme />  <!-- Light theme (default) -->
+```
 
 To:
+```xml
+<FluentTheme PreferredTheme="Dark" />  <!-- Dark theme -->
+```
 
-xml<FluentTheme PreferredTheme="Dark" />  <!-- Dark theme -->
+---
 
+## 📦 NuGet Packages
 
-📦 NuGet Packages
+| Package | Version | Purpose |
+|---|---|---|
+| `Avalonia` | 11.1.3 | GUI Framework |
+| `Avalonia.Themes.Fluent` | 11.1.3 | Modern Fluent design theme |
+| `Avalonia.ReactiveUI` | 11.1.3 | Reactive MVVM bindings |
+| `Avalonia.Desktop` | 11.1.3 | Desktop platform support |
+| `Avalonia.Fonts.Inter` | 11.1.3 | Font library |
 
-PackageVersionPurposeAvalonia11.1.3GUI FrameworkAvalonia.Themes.Fluent11.1.3Modern Fluent design themeAvalonia.ReactiveUI11.1.3Reactive MVVM bindingsAvalonia.Desktop11.1.3Desktop platform supportAvalonia.Fonts.Inter11.1.3Font library
+All included in `NotebookApp.csproj`.
 
-All included in NotebookApp.csproj.
+---
 
+## 🐛 Troubleshooting
 
-🐛 Troubleshooting
-
-App won't start
-
-bashdotnet clean
+### **App won't start**
+```bash
+dotnet clean
 dotnet restore
 dotnet build
 dotnet run
+```
 
-"ClassicDesktopApplicationLifetime not found"
+### **"ClassicDesktopApplicationLifetime not found"**
+Make sure `Avalonia.Desktop` package is installed:
+```bash
+dotnet add package Avalonia.Desktop --version 11.1.3
+```
 
-Make sure Avalonia.Desktop package is installed:
+### **Notes not saving**
+- Check that you have write permissions in the project directory
+- Ensure `notes.json` exists or can be created
+- Check file paths in `MainViewModel.cs`
 
-bashdotnet add package Avalonia.Desktop --version 11.1.3
+---
 
-Notes not saving
+## 📚 Learning Resources
 
+- [Avalonia Documentation](https://docs.avaloniaui.net/)
+- [ReactiveUI](https://www.reactiveui.net/)
+- [MVVM Pattern](https://docs.microsoft.com/en-us/archive/msdn-magazine/2009/february/patterns-wpf-apps-with-the-model-view-viewmodel-design-pattern)
+- [JSON Serialization in .NET](https://docs.microsoft.com/en-us/dotnet/standard/serialization/system-text-json-overview)
 
-Check that you have write permissions in the project directory
-Ensure notes.json exists or can be created
-Check file paths in MainViewModel.cs
+---
 
-
-
-📚 Learning Resources
-
-
-Avalonia Documentation
-ReactiveUI
-MVVM Pattern
-JSON Serialization in .NET
-
-
-
-📄 License
+## 📄 License
 
 This project is for educational purposes as part of a university OOP course.
 
+---
 
-✍️ Author
+## ✍️ Author
 
-Aylin — Fırat University, 2nd Year Software Engineering Student
+**Aylin** — Fırat University, 2nd Year Software Engineering Student
+- **Course:** Object-Oriented Programming (OOP)
+- **Project Type:** Weekly Assignment
+- **Date:** May 2026
 
+---
 
-Course: Object-Oriented Programming (OOP)
-Project Type: Weekly Assignment
-Date: May 2026
-
-
-
-🎓 What You'll Learn
+## 🎓 What You'll Learn
 
 By studying this codebase, you'll understand:
 
+1. ✅ **Encapsulation** — Protecting data with properties
+2. ✅ **Single Responsibility** — Each class does one thing
+3. ✅ **MVVM Architecture** — Separating UI from logic
+4. ✅ **File I/O** — Reading/writing files with `File` class
+5. ✅ **JSON Serialization** — Converting objects ↔ JSON
+6. ✅ **Reactive Programming** — UI automatically responds to state changes
+7. ✅ **Dependency Injection** — Passing dependencies to constructors
+8. ✅ **Data Validation** — Ensuring data integrity
 
-✅ Encapsulation — Protecting data with properties
-✅ Single Responsibility — Each class does one thing
-✅ MVVM Architecture — Separating UI from logic
-✅ File I/O — Reading/writing files with File class
-✅ JSON Serialization — Converting objects ↔ JSON
-✅ Reactive Programming — UI automatically responds to state changes
-✅ Dependency Injection — Passing dependencies to constructors
-✅ Data Validation — Ensuring data integrity
+---
 
+## 🚀 Future Enhancements
 
+- [ ] Add note categories/tags
+- [ ] Dark mode theme toggle
+- [ ] Export notes to PDF
+- [ ] Cloud sync (OneDrive, Google Drive)
+- [ ] Rich text editor (bold, italic, etc.)
+- [ ] Note templates
+- [ ] Markdown support
+- [ ] Database backend (SQLite) instead of JSON
 
-🚀 Future Enhancements
+---
 
-
- Add note categories/tags
- Dark mode theme toggle
- Export notes to PDF
- Cloud sync (OneDrive, Google Drive)
- Rich text editor (bold, italic, etc.)
- Note templates
- Markdown support
- Database backend (SQLite) instead of JSON
-
-
-
-Enjoy building! Happy coding! 🎉
+**Enjoy building! Happy coding! 🎉**
